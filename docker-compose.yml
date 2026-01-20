@@ -1,0 +1,9 @@
+services:
+  portfolio:
+    build: .
+    container_name: portfolio
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - "127.0.0.1:3002:3000"
