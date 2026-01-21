@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { colorMode } = useColorMode();
 const { isVisible, sectionRef } = useScrollReveal();
 
 interface Experience {
@@ -125,7 +126,12 @@ const toggleExpand = (index: number) => {
   >
     <!-- Background -->
     <div
-      class="absolute inset-0 bg-gradient-to-b from-dark-950 via-primary-950/10 to-dark-950 -z-10"
+      :class="[
+        'absolute inset-0 -z-10 transition-colors duration-300',
+        colorMode === 'dark'
+          ? 'bg-gradient-to-b from-light-950 via-primary-950/10 to-light-950'
+          : 'bg-gradient-to-b from-white via-primary-50/20 to-white'
+      ]"
     />
 
     <div class="container mx-auto px-4 md:px-8 relative z-10">
@@ -134,7 +140,7 @@ const toggleExpand = (index: number) => {
         class="text-center mb-16"
         :class="isVisible ? 'animate-fade-in-up' : 'opacity-0'"
       >
-        <p class="text-primary-400 font-medium mb-2">What I've Done</p>
+        <p class="text-primary-600 font-medium mb-2">What I've Done</p>
         <h2 class="section-heading">
           Work <span class="gradient-text">Experience</span>
         </h2>
@@ -147,7 +153,7 @@ const toggleExpand = (index: number) => {
       <div class="max-w-4xl mx-auto relative">
         <!-- Timeline line -->
         <div
-          class="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-primary-500 via-purple-500 to-pink-500 transform md:-translate-x-1/2"
+          class="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-primary-400 via-primary-500 to-primary-600 transform md:-translate-x-1/2"
         />
 
         <!-- Experience items -->
@@ -167,8 +173,9 @@ const toggleExpand = (index: number) => {
             <!-- Timeline dot -->
             <div
               :class="[
-                'absolute w-4 h-4 bg-primary-500 rounded-full border-4 border-dark-900 z-10',
+                'absolute w-4 h-4 bg-primary-500 rounded-full border-4 z-10 shadow-md',
                 'left-0 md:left-1/2 top-6 transform md:-translate-x-1/2 -translate-x-1/2',
+                colorMode === 'dark' ? 'border-light-900' : 'border-white'
               ]"
             />
 
@@ -181,13 +188,21 @@ const toggleExpand = (index: number) => {
               <div class="flex items-start justify-between gap-4">
                 <div class="flex-1">
                   <h3
-                    class="text-lg font-bold text-white group-hover:text-primary-400 transition-colors"
+                    :class="[
+                      'text-lg font-bold transition-colors',
+                      colorMode === 'dark' 
+                        ? 'text-white group-hover:text-primary-400' 
+                        : 'text-light-900 group-hover:text-primary-600'
+                    ]"
                   >
                     {{ exp.role }}
                   </h3>
-                  <p class="text-primary-400 font-medium">{{ exp.company }}</p>
+                  <p class="text-primary-600 font-medium">{{ exp.company }}</p>
                   <div
-                    class="flex flex-wrap items-center gap-2 mt-2 text-sm text-dark-400"
+                    :class="[
+                      'flex flex-wrap items-center gap-2 mt-2 text-sm',
+                      colorMode === 'dark' ? 'text-light-400' : 'text-light-500'
+                    ]"
                   >
                     <span class="flex items-center gap-1">
                       <svg
@@ -233,7 +248,12 @@ const toggleExpand = (index: number) => {
 
                 <!-- Expand icon -->
                 <button
-                  class="p-2 text-dark-400 hover:text-primary-400 transition-colors"
+                  :class="[
+                    'p-2 transition-colors',
+                    colorMode === 'dark' 
+                      ? 'text-light-400 hover:text-primary-400' 
+                      : 'text-light-500 hover:text-primary-600'
+                  ]"
                 >
                   <svg
                     class="w-5 h-5 transition-transform duration-300"
@@ -262,18 +282,27 @@ const toggleExpand = (index: number) => {
                 leave-to-class="opacity-0 max-h-0"
               >
                 <div v-if="activeIndex === index" class="overflow-hidden">
-                  <div class="pt-4 mt-4 border-t border-dark-700">
-                    <p class="text-dark-300 mb-4">{{ exp.description }}</p>
+                  <div :class="[
+                    'pt-4 mt-4 border-t',
+                    colorMode === 'dark' ? 'border-light-700' : 'border-light-200'
+                  ]">
+                    <p :class="[
+                      'mb-4',
+                      colorMode === 'dark' ? 'text-light-300' : 'text-light-600'
+                    ]">{{ exp.description }}</p>
 
                     <!-- Highlights -->
                     <ul class="space-y-2 mb-4">
                       <li
                         v-for="highlight in exp.highlights"
                         :key="highlight"
-                        class="flex items-start gap-2 text-dark-300 text-sm"
+                        :class="[
+                          'flex items-start gap-2 text-sm',
+                          colorMode === 'dark' ? 'text-light-300' : 'text-light-600'
+                        ]"
                       >
                         <svg
-                          class="w-4 h-4 text-primary-400 mt-0.5 flex-shrink-0"
+                          class="w-4 h-4 text-primary-500 mt-0.5 flex-shrink-0"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
