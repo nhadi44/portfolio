@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { colorMode } = useColorMode();
 const isMenuOpen = ref(false);
 const isScrolled = ref(false);
 const isNavVisible = ref(true);
@@ -76,7 +77,7 @@ onMounted(() => {
           @click.prevent="scrollToSection('#home')"
           class="text-xl md:text-2xl font-bold gradient-text"
         >
-          Hadi<span class="text-white">.</span>dev
+          Hadi<span :class="colorMode === 'dark' ? 'text-white' : 'text-primary-800'">.</span>dev
         </a>
 
         <!-- Desktop Navigation -->
@@ -89,62 +90,75 @@ onMounted(() => {
             :class="[
               'text-sm font-medium transition-all duration-200 relative',
               activeSection === item.href.substring(1)
-                ? 'text-primary-400'
-                : 'text-dark-300 hover:text-white',
+                ? 'text-primary-600 dark:text-primary-400'
+                : colorMode === 'dark' 
+                  ? 'text-light-300 hover:text-white' 
+                  : 'text-light-600 hover:text-primary-600',
             ]"
           >
             {{ item.name }}
             <span
               v-if="activeSection === item.href.substring(1)"
-              class="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-primary-500 to-purple-500 rounded-full"
+              class="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-primary-500 to-primary-600 rounded-full"
             />
           </a>
         </div>
 
-        <!-- CTA Button (Desktop) -->
-        <a
-          href="#contact"
-          @click.prevent="scrollToSection('#contact')"
-          class="hidden md:block btn-primary text-sm"
-        >
-          Let's Talk
-        </a>
+        <!-- Right side: Color toggle + CTA -->
+        <div class="hidden md:flex items-center gap-3">
+          <UiColorModeToggle />
+          <a
+            href="#contact"
+            @click.prevent="scrollToSection('#contact')"
+            class="btn-primary text-sm"
+          >
+            Let's Talk
+          </a>
+        </div>
 
-        <!-- Mobile Menu Button -->
-        <button
-          @click="isMenuOpen = !isMenuOpen"
-          class="md:hidden p-2 text-dark-300 hover:text-white transition-colors"
-          aria-label="Toggle menu"
-        >
-          <svg
-            v-if="!isMenuOpen"
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        <!-- Mobile: Color toggle + Menu Button -->
+        <div class="flex md:hidden items-center gap-2">
+          <UiColorModeToggle />
+          <button
+            @click="isMenuOpen = !isMenuOpen"
+            :class="[
+              'p-2 transition-colors',
+              colorMode === 'dark' 
+                ? 'text-light-300 hover:text-white' 
+                : 'text-light-600 hover:text-primary-600'
+            ]"
+            aria-label="Toggle menu"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-          <svg
-            v-else
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
+            <svg
+              v-if="!isMenuOpen"
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+            <svg
+              v-else
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
 
       <!-- Mobile Menu -->
@@ -166,8 +180,10 @@ onMounted(() => {
               :class="[
                 'px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200',
                 activeSection === item.href.substring(1)
-                  ? 'bg-primary-500/20 text-primary-400'
-                  : 'text-dark-300 hover:bg-dark-800 hover:text-white',
+                  ? 'bg-primary-50 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400'
+                  : colorMode === 'dark'
+                    ? 'text-light-300 hover:bg-light-800 hover:text-white'
+                    : 'text-light-600 hover:bg-light-100 hover:text-primary-600',
               ]"
             >
               {{ item.name }}
